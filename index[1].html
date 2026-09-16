@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma Chance de Amor ❤️</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            background: radial-gradient(circle, #4a1238, #100510);
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .caixa {
+            width: min(90%, 650px);
+            padding: 40px 20px;
+            background: rgba(20, 5, 18, 0.85);
+            border: 1px solid #ff4f91;
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(255, 20, 100, 0.35);
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            color: #ff9bc5;
+            font-size: clamp(25px, 5vw, 40px);
+            line-height: 1.4;
+        }
+        p { color: #f4d6e5; font-size: 17px; line-height: 1.7; }
+        .botoes {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+        #sim {
+            background: #e91450;
+            box-shadow: 0 0 20px rgba(255, 20, 90, 0.5);
+        }
+        #sim:hover { transform: scale(1.08); }
+        #nao {
+            background: #4b474d;
+            position: relative;
+            z-index: 5;
+        }
+        #mensagem { display: none; animation: aparecer 1s ease; }
+        #mensagem h2 {
+            color: #ff8fbd;
+            font-family: Georgia, serif;
+            font-size: 28px;
+        }
+        .coracao {
+            position: fixed;
+            top: -40px;
+            pointer-events: none;
+            animation: cair linear forwards;
+            z-index: 1;
+        }
+        .aviso-musica {
+            margin-top: 18px;
+            color: #ffd0e4;
+            font-size: 13px;
+        }
+        @keyframes cair {
+            from { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 500px) {
+            .botoes { gap: 10px; }
+            button { padding: 13px 22px; font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="musica" autoplay loop>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <main class="caixa" id="caixa">
+        <div style="font-size: 45px;">💗</div>
+
+        <h1>Você me daria uma chance de te fazer feliz? 🥰</h1>
+
+        <p id="subtitulo">
+            Às vezes, tudo o que precisamos é de alguém
+            que acredita na gente...<br>
+            E eu acredito em nós. ❤️
+        </p>
+
+        <div class="botoes" id="botoes">
+            <button id="sim" onclick="aceitou()">SIM 💖</button>
+            <button id="nao">NÃO ❌</button>
+        </div>
+
+        <div id="mensagem">
+            <div style="font-size: 50px;">💖</div>
+            <h2>Nossa, que bom que disse SIM! 🥹❤️</h2>
+            <p>
+                Você não faz ideia do quanto isso significa para mim...<br>
+                Agora tudo fica mais bonito, porque você está aqui.
+            </p>
+            <p style="color: #ff8fbd; font-family: Georgia, serif;">
+                Eu te quero. Sempre. ❤️
+            </p>
+        </div>
+
+        <div class="aviso-musica" id="avisoMusica">
+            🎶 A música tentará começar automaticamente.
+        </div>
+    </main>
+
+    <script>
+        const botaoNao = document.getElementById("nao");
+        const musica = document.getElementById("musica");
+        const avisoMusica = document.getElementById("avisoMusica");
+
+        botaoNao.addEventListener("mouseenter", fugir);
+        botaoNao.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            fugir();
+        });
+
+        function fugir() {
+            const margem = 15;
+            const larguraMaxima = window.innerWidth - botaoNao.offsetWidth - margem;
+            const alturaMaxima = window.innerHeight - botaoNao.offsetHeight - margem;
+
+            const novaPosicaoX = margem + Math.random() * Math.max(0, larguraMaxima - margem);
+            const novaPosicaoY = margem + Math.random() * Math.max(0, alturaMaxima - margem);
+
+            botaoNao.style.position = "fixed";
+            botaoNao.style.left = novaPosicaoX + "px";
+            botaoNao.style.top = novaPosicaoY + "px";
+        }
+
+        // Muitos navegadores bloqueiam autoplay com som.
+        // O primeiro clique/toque na página libera a música.
+        function iniciarMusica() {
+            musica.play().then(() => {
+                avisoMusica.textContent = "🎶 Música tocando...";
+            }).catch(() => {
+                avisoMusica.textContent = "🎶 Toque na página para iniciar a música.";
+            });
+        }
+
+        window.addEventListener("load", iniciarMusica, { once: true });
+        document.addEventListener("click", iniciarMusica, { once: true });
+        document.addEventListener("touchstart", iniciarMusica, { once: true });
+
+        function aceitou() {
+            document.getElementById("botoes").style.display = "none";
+            document.getElementById("subtitulo").innerHTML =
+                "Meu coração acaba de ficar ainda mais feliz. 💕";
+            document.getElementById("mensagem").style.display = "block";
+            document.getElementById("caixa").style.boxShadow =
+                "0 0 80px rgba(255, 20, 130, 0.8)";
+            criarCoracoes();
+        }
+
+        function criarCoracoes() {
+            const simbolos = ["❤️", "💖", "💕", "💗", "🌹", "🌸"];
+
+            for (let i = 0; i < 35; i++) {
+                const coracao = document.createElement("div");
+                coracao.className = "coracao";
+                coracao.innerHTML =
+                    simbolos[Math.floor(Math.random() * simbolos.length)];
+                coracao.style.left = Math.random() * 100 + "vw";
+                coracao.style.fontSize = (15 + Math.random() * 25) + "px";
+                coracao.style.animationDuration = (4 + Math.random() * 5) + "s";
+                document.body.appendChild(coracao);
+
+                setTimeout(() => coracao.remove(), 10000);
+            }
+
+            setTimeout(criarCoracoes, 3000);
+        }
+    </script>
+</body>
+</html>
